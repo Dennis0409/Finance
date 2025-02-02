@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        form {
+            max-width: 300px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <form id="register-form">
+        <h1>User Registration</h1>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Register</button>
+    </form>
+    <button style="width: 20%;
+    background-color: #007bff;
+    color: white;
+    display: block;  /* 讓按鈕換行 */
+    margin: 10px auto;"onclick="goToLogin()">Login</button>
+
+    <div id="message" style="margin-top: 20px; color: red;"></div>
+
+    <script>
+        const BASE_URL = window.location.origin + "/api";
+        document.getElementById('register-form').addEventListener('submit', async (event) => {
+            event.preventDefault(); // 防止表單自動提交
+
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const username = usernameInput.value;
+            const password = passwordInput.value;
+
+            try {
+                const response = await fetch(`${BASE_URL}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    usernameInput.value = '';
+                    passwordInput.value = '';
+                    document.getElementById('message').style.color = 'green';
+                    document.getElementById('message').textContent = result.message;
+                    
+                } else {
+                    document.getElementById('message').style.color = 'red';
+                    document.getElementById('message').textContent = result.error;
+                }
+            } catch (error) {
+                document.getElementById('message').style.color = 'red';
+                document.getElementById('message').textContent = 'An error occurred. Please try again.';
+                console.error('Error:', error);
+            }
+        });
+
+        function goToLogin() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
