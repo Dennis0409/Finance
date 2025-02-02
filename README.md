@@ -11,7 +11,7 @@
 ## 如何運行（使用 Docker）
 ```bash
 git clone https://github.com/Dennis0409/Finance.git
-cd back
+cd Finance
 docker-compose up --build -d
 ```
 之後訪問：```http://127.0.0.1:5001```
